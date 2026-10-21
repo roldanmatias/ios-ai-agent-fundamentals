@@ -1,0 +1,60 @@
+{
+  "Count": 2,
+  "TotalHotelCount": 2,
+  "TransactionId": "f06edfa3-27f4-44e6-838c-b8dd3d0a3210",
+  "StayDates": {
+    "CheckInDate": "2027-11-01",
+    "CheckOutDate": "2027-11-03"
+  },
+  "LengthOfStay": 2,
+  "NumberOfRooms": 1,
+  "Hotels": [
+    {
+      "Id": "14747",
+      "Name": "Four Seasons Hotel Seattle",
+      "LocalCurrencyCode": "USD",
+      "Location": {
+        "Address": {
+          "Address1": "99 Union St",
+          "City": "Seattle",
+          "Province": "WA",
+          "Country": "USA",
+          "PostalCode": "98101"
+        },
+        "GeoLocation": {
+          "Latitude": "47.60769",
+          "Longitude": "-122.34083",
+          "Obfuscated": false
+        }
+      },
+      "Status": "AVAILABLE",
+      "ThumbnailUrl": "https://images.trvl-media.com/hotels/14747_t.jpg",
+      "StarRating": "5.0",
+      "GuestRating": "9.2",
+      "GuestReviewCount": 240,
+      "RoomTypes": [
+        {
+          "Description": "Room, 1 King Bed, City View",
+          "OfferId": "wMRoCMjQqCDIwMTcwN",
+          "Price": {
+            "BaseRate": { "Value": "901.0", "Currency": "USD" },
+            "TaxesAndFees": { "Value": "120.9", "Currency": "USD" },
+            "TotalPrice": { "Value": "1021.9", "Currency": "USD" },
+            "AvgNightlyRate": { "Value": "450.5", "Currency": "USD" }
+          },
+          "Links": {
+            "WebDetails": {
+              "Method": "GET",
+              "Href": "https://www.expedia.com/Hotel.h14747.Hotel-Information"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "28082",
+      "Name": "Pike Place Inn",
+      "Status": "NOT_AVAILABLE"
+    }
+  ]
+}
