@@ -1,5 +1,4 @@
 import Foundation
-import ListingsKit
 
 extension Listing {
     init(_ hotel: HotelListingsResponse.Hotel) {
