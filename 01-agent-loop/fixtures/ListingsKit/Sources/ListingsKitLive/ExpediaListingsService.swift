@@ -39,7 +39,7 @@ public struct ExpediaListingsService: ListingsService {
             URLQueryItem(name: "locationKeyword", value: query.location),
             URLQueryItem(name: "checkIn", value: query.checkIn.formatted(day)),
             URLQueryItem(name: "checkOut", value: query.checkOut.formatted(day)),
-            URLQueryItem(name: "room1.adults", value: String(query.adults))
+            URLQueryItem(name: "room1.adults", value: query.adults)
         ]
         if let currencyCode = query.currencyCode {
             items.append(URLQueryItem(name: "currency", value: currencyCode))
