@@ -15,8 +15,11 @@ public struct ExpediaListingsService: ListingsService {
         self.transport = transport
         self.timeZone = timeZone
     }
+    
+    @available(*, unavailable, renamed: "loadListings()")
+    public func listings(for query: ListingsQuery) async throws -> [Listing] { fatalError() }
 
-    public func listings(for query: ListingsQuery) async throws -> [Listing] {
+    public func loadListings(for query: ListingsQuery) async throws -> [Listing] {
         let (data, response) = try await transport.send(makeRequest(for: query))
         guard let response = response as? HTTPURLResponse else {
             throw ExpediaListingsError.invalidResponse

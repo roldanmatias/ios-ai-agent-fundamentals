@@ -3,7 +3,7 @@ import Testing
 import ListingsKit
 @testable import ListingsKitLive
 
-struct ExpediaListingsServiceTests {
+struct loadListings {
     private let utc = TimeZone(identifier: "UTC")!
     private let configuration = ExpediaConfiguration(
         apiKey: "test-key",
