@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+# Ad-hoc xcfix runs write here; the eval's traces live in evals/traces/ and are committed.
+/traces/
