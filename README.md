@@ -1,2 +1,42 @@
 # ios-ai-agent-fundamentals
-Agent loop from scratch, Claude Code configs and study notes
+
+AI agents for iOS development, built from first principles: a tool-using agent loop written by hand on the Claude API, plus study notes on agent design, each tied back to the code.
+
+## Modules
+
+| Module | What it is | Highlights |
+| --- | --- | --- |
+| [01 · Agent loop](01-agent-loop/) | **xcfix**: an agent that fixes Swift packages and Xcode projects whose build or tests fail, in a hand-written Python loop | Fixed **15/15** runs across 5 seeded bugs, at **$0.015** and **21.5 s** per run on average (eval of 2026-10-22). Narrow iOS tools, harness-side verification, guardrails, git rollback, prompt caching, JSONL traces |
+
+## Notes
+
+| Note | About |
+| --- | --- |
+| [Building Effective Agents](notes/building_effective_agents.md) | Workflows vs agents, the core patterns (chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer), with iOS examples |
+| [Managed Agents vs xcfix](notes/managed_agents.md) | The session / harness / sandbox split from Anthropic's "Scaling Managed Agents" post, mapped onto xcfix: what matches, what's missing, why cloud sandboxes don't fit iOS |
+| [The agent loop, explained](notes/agent_loop_explained.md) | The loop, tool calls, stop conditions and workflow vs agent, answered with xcfix's design and eval numbers |
+
+## Run it
+
+The agent and its eval need macOS with Xcode (for `swift build` / `swift test`), Python 3.12, and an Anthropic API key:
+
+```bash
+cd 01-agent-loop
+python3.12 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+export ANTHROPIC_API_KEY=...
+
+.venv/bin/xcfix fixtures/ListingsKit       # run the agent on a project
+.venv/bin/python evals/run_eval.py         # rerun the eval on the bug/* branches (about $0.25)
+.venv/bin/pytest                           # tests: no API key and no compiler needed
+```
+
+The seeded bugs live on the `bug/*` branches. The eval checks each one out in a temporary git worktree, so your checkout is never touched.
+
+## What I learned
+
+- **The harness, not the model, decides when the work is done.** Accepting the model's "finished" only after the harness's own build and tests pass, and rolling back otherwise, is what makes an agent safe to run unattended.
+- **Narrow tools beat a shell.** They're safer, far cheaper in tokens (parsed errors instead of build logs), and each one is a place to enforce policy, such as rejecting an edit that deletes a test assertion.
+- **Error messages are part of the interface.** "`old_str` occurs 2 times; include more context" turned every failed edit in the eval into a successful retry on the next turn.
+- **Caching is an architecture decision.** An append-only history with a frozen prompt prefix made the runs about 65% cheaper. The same rule, never rewrite earlier turns, is what keeps newer models' thinking blocks valid.
+- **Measure before optimizing.** The traces showed output tokens are half the cost and builds take half the time, which is where the next improvements should go.
