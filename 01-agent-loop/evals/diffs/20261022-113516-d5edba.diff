@@ -1,0 +1,13 @@
+diff --git a/01-agent-loop/fixtures/ListingsKit/Tests/ListingsKitLiveTests/ExpediaListingsServiceTests.swift b/01-agent-loop/fixtures/ListingsKit/Tests/ListingsKitLiveTests/ExpediaListingsServiceTests.swift
+index 1214e58..697fb27 100644
+--- a/01-agent-loop/fixtures/ListingsKit/Tests/ListingsKitLiveTests/ExpediaListingsServiceTests.swift
++++ b/01-agent-loop/fixtures/ListingsKit/Tests/ListingsKitLiveTests/ExpediaListingsServiceTests.swift
+@@ -33,7 +33,7 @@ struct ExpediaListingsServiceTests {
+         #expect(first.id == "14747")
+         #expect(first.name == "Four Seasons Hotel Seattle")
+         #expect(first.city == "Seattle")
+-        #expect(first.starRating == 0.0)
++        #expect(first.starRating == 5.0)
+         #expect(first.guestRating == 9.2)
+         #expect(first.reviewCount == 240)
+         #expect(first.thumbnailURL == URL(string: "https://images.trvl-media.com/hotels/14747_t.jpg"))

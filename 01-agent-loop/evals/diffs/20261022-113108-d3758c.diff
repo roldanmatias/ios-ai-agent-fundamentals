@@ -1,0 +1,10 @@
+diff --git a/01-agent-loop/fixtures/ListingsKit/Sources/ListingsKitLive/DTO/Listing+Hotel.swift b/01-agent-loop/fixtures/ListingsKit/Sources/ListingsKitLive/DTO/Listing+Hotel.swift
+index 6f6e36a..13646dc 100644
+--- a/01-agent-loop/fixtures/ListingsKit/Sources/ListingsKitLive/DTO/Listing+Hotel.swift
++++ b/01-agent-loop/fixtures/ListingsKit/Sources/ListingsKitLive/DTO/Listing+Hotel.swift
+@@ -1,4 +1,5 @@
+ import Foundation
++import ListingsKit
+ 
+ extension Listing {
+     init(_ hotel: HotelListingsResponse.Hotel) {

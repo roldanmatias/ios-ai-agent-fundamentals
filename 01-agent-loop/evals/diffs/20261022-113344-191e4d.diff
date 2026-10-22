@@ -1,0 +1,39 @@
+diff --git a/01-agent-loop/fixtures/ListingsKit/Tests/ListingsKitLiveTests/ExpediaListingsServiceTests.swift b/01-agent-loop/fixtures/ListingsKit/Tests/ListingsKitLiveTests/ExpediaListingsServiceTests.swift
+index 7857b32..f218463 100644
+--- a/01-agent-loop/fixtures/ListingsKit/Tests/ListingsKitLiveTests/ExpediaListingsServiceTests.swift
++++ b/01-agent-loop/fixtures/ListingsKit/Tests/ListingsKitLiveTests/ExpediaListingsServiceTests.swift
+@@ -26,7 +26,7 @@ struct loadListings {
+         let transport = StubTransport(body: try fixture("listings"))
+         let service = ExpediaListingsService(configuration: configuration, transport: transport, timeZone: utc)
+ 
+-        let listings = try await service.listings(for: query)
++        let listings = try await service.loadListings(for: query)
+ 
+         #expect(listings.count == 2)
+         let first = try #require(listings.first)
+@@ -50,7 +50,7 @@ struct loadListings {
+         let transport = StubTransport(body: Data(#"{"Hotels":[]}"#.utf8))
+         let service = ExpediaListingsService(configuration: configuration, transport: transport, timeZone: utc)
+ 
+-        _ = try await service.listings(for: query)
++        _ = try await service.loadListings(for: query)
+ 
+         let request = try #require(await transport.requests.first)
+         let url = try #require(request.url)
+@@ -75,7 +75,7 @@ struct loadListings {
+         let transport = StubTransport(body: Data(#"{"Count":0,"TransactionId":"abc"}"#.utf8))
+         let service = ExpediaListingsService(configuration: configuration, transport: transport, timeZone: utc)
+ 
+-        let listings = try await service.listings(for: query)
++        let listings = try await service.loadListings(for: query)
+ 
+         #expect(listings.isEmpty)
+     }
+@@ -86,7 +86,7 @@ struct loadListings {
+         let service = ExpediaListingsService(configuration: configuration, transport: transport, timeZone: utc)
+ 
+         await #expect(throws: ExpediaListingsError.server(statusCode: 400, messages: ["Invalid checkIn date."])) {
+-            try await service.listings(for: query)
++            try await service.loadListings(for: query)
+         }
+     }
