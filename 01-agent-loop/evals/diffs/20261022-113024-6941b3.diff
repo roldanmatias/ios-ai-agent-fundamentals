@@ -1,0 +1,13 @@
+diff --git a/01-agent-loop/fixtures/ListingsKit/Sources/ListingsKitLive/ExpediaListingsService.swift b/01-agent-loop/fixtures/ListingsKit/Sources/ListingsKitLive/ExpediaListingsService.swift
+index ba8decd..575e697 100644
+--- a/01-agent-loop/fixtures/ListingsKit/Sources/ListingsKitLive/ExpediaListingsService.swift
++++ b/01-agent-loop/fixtures/ListingsKit/Sources/ListingsKitLive/ExpediaListingsService.swift
+@@ -39,7 +39,7 @@ public struct ExpediaListingsService: ListingsService {
+             URLQueryItem(name: "locationKeyword", value: query.location),
+             URLQueryItem(name: "checkIn", value: query.checkIn.formatted(day)),
+             URLQueryItem(name: "checkOut", value: query.checkOut.formatted(day)),
+-            URLQueryItem(name: "room1.adults", value: query.adults)
++            URLQueryItem(name: "room1.adults", value: String(query.adults))
+         ]
+         if let currencyCode = query.currencyCode {
+             items.append(URLQueryItem(name: "currency", value: currencyCode))
