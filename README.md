@@ -10,11 +10,12 @@ AI agents for iOS development, built from first principles: a tool-using agent l
 
 ## Notes
 
-| Note | About |
-| --- | --- |
-| [Building Effective Agents](notes/building_effective_agents.md) | Workflows vs agents, the core patterns (chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer), with iOS examples |
-| [Managed Agents vs xcfix](notes/managed_agents.md) | The session / harness / sandbox split from Anthropic's "Scaling Managed Agents" post, mapped onto xcfix: what matches, what's missing, why cloud sandboxes don't fit iOS |
-| [The agent loop, explained](notes/agent_loop_explained.md) | The loop, tool calls, stop conditions and workflow vs agent, answered with xcfix's design and eval numbers |
+| Module | Note | About |
+| --- | --- | --- |
+| 01 · Agent loop | [Building Effective Agents](01-agent-loop/notes/building_effective_agents.md) | Workflows vs agents, the core patterns (chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer), with iOS examples |
+| 01 · Agent loop | [Managed Agents vs xcfix](01-agent-loop/notes/managed_agents.md) | The session / harness / sandbox split from Anthropic's "Scaling Managed Agents" post, mapped onto xcfix: what matches, what's missing, why cloud sandboxes don't fit iOS |
+| 01 · Agent loop | [The agent loop, explained](01-agent-loop/notes/agent_loop_explained.md) | The loop, tool calls, stop conditions and workflow vs agent, answered with xcfix's design and eval numbers |
+| 02 · Claude Code | [Claude Code: concepts and tips](02-claude-code/notes/claude_code.md) | Notes from *Claude Code in Action*: steering a session, CLAUDE.md, skills, permission modes, hooks, headless runs and the SDK, GitHub Code Review, plugins, and how they apply to ListingsKit. Rule of thumb: CLAUDE.md and skills are instructions, hooks are code that always runs |
 
 ## Run it
 

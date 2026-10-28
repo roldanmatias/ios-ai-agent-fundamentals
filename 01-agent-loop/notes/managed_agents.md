@@ -1,6 +1,6 @@
 # Managed Agents: Session, Harness and Sandbox, Compared With xcfix
 
-> Study notes on Anthropic's engineering post [Scaling Managed Agents: Decoupling the brain from the hands](https://www.anthropic.com/engineering/managed-agents) (April 8, 2026, by Lance Martin, Gabe Cemaj and Michael Cohen). They compare its architecture with **xcfix**, the hand-written agent loop in [`01-agent-loop`](../01-agent-loop/).
+> Study notes on Anthropic's engineering post [Scaling Managed Agents: Decoupling the brain from the hands](https://www.anthropic.com/engineering/managed-agents) (April 8, 2026, by Lance Martin, Gabe Cemaj and Michael Cohen). They compare its architecture with **xcfix**, the hand-written agent loop in [`01-agent-loop`](../).
 >
 > Conceptual notes only. xcfix does not use Managed Agents. The general concepts, with iOS examples, are in [building_effective_agents.md](building_effective_agents.md) §9–13; this file maps them onto xcfix and asks what the comparison teaches.
 

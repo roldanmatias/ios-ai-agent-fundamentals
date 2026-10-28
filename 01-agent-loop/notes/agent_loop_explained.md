@@ -1,6 +1,6 @@
 # The Agent Loop, Explained Through xcfix
 
-> How a tool-using agent works, with every answer grounded in [xcfix](../01-agent-loop/), the build-and-test fixer in this repo, and its eval numbers (2026-10-22: 15 of 15 runs fixed, $0.015 and 21.5 s per run on average).
+> How a tool-using agent works, with every answer grounded in [xcfix](../), the build-and-test fixer in this repo, and its eval numbers (2026-10-22: 15 of 15 runs fixed, $0.015 and 21.5 s per run on average).
 
 ## Fundamentals
 
