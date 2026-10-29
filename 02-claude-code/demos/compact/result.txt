@@ -1,0 +1,2 @@
+result: success, turns 2, cost $0.030345000000000004, 4.746 s
+`PriceFormatter` is a `Sendable` struct that turns a `Price` into a localized currency string, using the price's currency code and the formatter's `Locale`, which defaults to the user's current locale.

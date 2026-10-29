@@ -1,0 +1,16 @@
+diff --git a/Tests/ListingsKitTests/PriceTests.swift b/Tests/ListingsKitTests/PriceTests.swift
+new file mode 100644
+index 0000000..484202e
+--- /dev/null
++++ b/Tests/ListingsKitTests/PriceTests.swift
+@@ -0,0 +1,10 @@
++import XCTest
++
++@testable import ListingsKit
++
++final class PriceTests: XCTestCase {
++    func testFormatsPrice() {
++        let price = Price(amount: 10, currencyCode: "USD")
++        XCTAssertEqual(PriceFormatter().string(from: price), "$10.00")
++    }
++}

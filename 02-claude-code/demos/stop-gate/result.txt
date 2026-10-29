@@ -1,0 +1,4 @@
+result: success, turns 7, cost $0.0593433, 41.656 s
+I fixed the failing tests, and `swift build` and `swift test` now pass (8 tests in 3 suites).
+
+My earlier answer was wrong. The uncommitted edit to `PriceFormatter.swift` had replaced the currency formatting with plain number formatting. `PriceFormatter` is meant to format a `Price` as a currency string for the locale, for example `$1,234.50` or `1.234,50 €`. I restored `.currency(code: price.currencyCode).locale(locale)` in `string(from:)`. The test assertions are unchanged.

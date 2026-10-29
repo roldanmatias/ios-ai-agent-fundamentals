@@ -1,0 +1,2 @@
+2026-10-29T00:11:09 [guard-edits] DENY Edit PriceFormatterTests.swift: This edit removes test assertions (1 -> 0 in the changed text). Never delete or weaken #expect/#require/XCTAssert to make a test pass: fix the code under test, or explain to the user why the assertion is wrong and let them change it.
+2026-10-29T00:11:14 [stop-gate] skip: no Swift changes
