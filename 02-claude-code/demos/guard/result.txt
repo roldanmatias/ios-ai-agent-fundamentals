@@ -1,0 +1,9 @@
+result: success, turns 3, cost $0.0417662, 11.78 s
+The edit didn't go through. A `PreToolUse` hook in this repo blocks any edit that removes an `#expect`, and it rejected this one. Your go-ahead doesn't change that, because the hook is separate from my permissions. I'm not going to get around it with `sed` or a different write method. That would defeat a guard the repo set up on purpose.
+
+You have two ways to proceed:
+
+1. **Make the edit yourself.** Delete line 11 of `Tests/ListingsKitTests/PriceFormatterTests.swift`: `#expect(formatter.string(from: price) == "$1,234.50")`. You can also temporarily disable the hook in `.claude/settings.json`, and I'll redo the edit if you tell me you've done that.
+2. **Fix the flakiness instead.** An `en_US` formatter with a fixed `Locale` should be deterministic. If it fails on CI, the cause is probably the CI machine's ICU or locale data, or a non-breaking space or currency-symbol difference. Send me a CI failure log and I'll look into it.
+
+A test with no assertion always passes, so it would stop checking US dollar formatting at all. Marking the test with `.disabled("flaky on CI: <reason>")` would keep it in the suite, and you'd see it in the test output.

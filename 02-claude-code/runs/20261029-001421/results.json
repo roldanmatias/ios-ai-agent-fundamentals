@@ -1,0 +1,82 @@
+[
+  {
+    "file": "Sources/ListingsKitLive/ExpediaConfiguration.swift",
+    "test_file": "Tests/ListingsKitLiveTests/ExpediaConfigurationTests.swift",
+    "verify": "PASS",
+    "outside_task": "none",
+    "seconds": 48,
+    "is_error": false,
+    "cost": 0.06518360000000001,
+    "turns": 7,
+    "agent": {
+      "test_file": "Tests/ListingsKitLiveTests/ExpediaConfigurationTests.swift",
+      "tests_added": 8,
+      "swift_test_passed": true,
+      "notes": "ExpediaConfiguration is a plain struct with one initializer, so the tests cover the defaults (base URL, unique UUID transaction ID), explicit overrides, empty strings, mutability and value-copy semantics; it has no mapping or failure paths. I ran only `swift test` (16 tests passed), not the verify-swift check.sh."
+    }
+  },
+  {
+    "file": "Sources/ListingsKitLive/DTO/HotelListingsResponse.swift",
+    "test_file": "Tests/ListingsKitLiveTests/HotelListingsResponseTests.swift",
+    "verify": "PASS",
+    "outside_task": "none",
+    "seconds": 53,
+    "is_error": false,
+    "cost": 0.082373,
+    "turns": 7,
+    "agent": {
+      "test_file": "Tests/ListingsKitLiveTests/HotelListingsResponseTests.swift",
+      "tests_added": 16,
+      "swift_test_passed": true,
+      "notes": "The type is a pure Decodable DTO (no defaults or mapping logic), so the tests decode through JSONDecoder.expedia to cover full, minimal, optional-nil and missing-required/wrong-type failure paths for HotelListingsResponse and ErrorResponse; the full run reported 25 tests passing."
+    }
+  },
+  {
+    "file": "Sources/ListingsKitLive/DTO/Listing+Hotel.swift",
+    "test_file": "Tests/ListingsKitLiveTests/ListingHotelTests.swift",
+    "verify": "PASS",
+    "outside_task": "none",
+    "seconds": 69,
+    "is_error": false,
+    "cost": 0.123586,
+    "turns": 13,
+    "agent": {
+      "test_file": "Tests/ListingsKitLiveTests/ListingHotelTests.swift",
+      "tests_added": 14,
+      "swift_test_passed": true,
+      "notes": "All 22 tests in the package pass; `Price(_:)` parses only the leading numeric prefix of `Money.value` (so \"1,234\" becomes 1 and \"12 USD\" becomes 12), which I pinned in a test and which may be worth tightening in the source."
+    }
+  },
+  {
+    "file": "Sources/ListingsKit/Listing.swift",
+    "test_file": "Tests/ListingsKitTests/ListingTests.swift",
+    "verify": "PASS",
+    "outside_task": "none",
+    "seconds": 49,
+    "is_error": false,
+    "cost": 0.1253571,
+    "turns": 7,
+    "agent": {
+      "test_file": "Tests/ListingsKitTests/ListingTests.swift",
+      "tests_added": 6,
+      "swift_test_passed": true,
+      "notes": "Listing is a plain value type with no mapping or failure paths, so the tests cover init defaults, stored values, Identifiable id, and Hashable/Equatable per field; all 14 tests in the package passed."
+    }
+  },
+  {
+    "file": "Sources/ListingsKit/Price.swift",
+    "test_file": "Tests/ListingsKitTests/PriceTests.swift",
+    "verify": "PASS",
+    "outside_task": "none",
+    "seconds": 43,
+    "is_error": false,
+    "cost": 0.10911280000000001,
+    "turns": 6,
+    "agent": {
+      "test_file": "Tests/ListingsKitTests/PriceTests.swift",
+      "tests_added": 6,
+      "swift_test_passed": true,
+      "notes": "Price is a plain memberwise struct with no defaults, mapping or failure paths, so the tests cover init storage, Hashable/Equatable, Set dedup, unvalidated edge values, and Sendable; all 14 tests in the package pass."
+    }
+  }
+]

@@ -1,0 +1,185 @@
+diff --git a/Tests/ListingsKitLiveTests/ListingHotelTests.swift b/Tests/ListingsKitLiveTests/ListingHotelTests.swift
+new file mode 100644
+index 0000000..a17d145
+--- /dev/null
++++ b/Tests/ListingsKitLiveTests/ListingHotelTests.swift
+@@ -0,0 +1,179 @@
++import Foundation
++import ListingsKit
++import Testing
++
++@testable import ListingsKitLive
++
++struct ListingHotelTests {
++    private typealias Response = HotelListingsResponse
++
++    private func hotel(
++        id: String = "h1",
++        name: String = "Hotel One",
++        city: String? = nil,
++        starRating: String? = nil,
++        guestRating: String? = nil,
++        guestReviewCount: Int? = nil,
++        thumbnailUrl: String? = nil,
++        roomTypes: [Response.RoomType]? = nil
++    ) -> Response.Hotel {
++        Response.Hotel(
++            id: id,
++            name: name,
++            location: city.map { Response.Location(address: Response.Address(city: $0)) },
++            starRating: starRating,
++            guestRating: guestRating,
++            guestReviewCount: guestReviewCount,
++            thumbnailUrl: thumbnailUrl,
++            roomTypes: roomTypes
++        )
++    }
++
++    private func money(_ value: String, _ currency: String = "USD") -> Response.Money {
++        Response.Money(value: value, currency: currency)
++    }
++
++    private func room(
++        nightly: Response.Money? = nil,
++        total: Response.Money? = nil,
++        href: String? = nil
++    ) -> Response.RoomType {
++        Response.RoomType(
++            price: Response.RoomPrice(avgNightlyRate: nightly, totalPrice: total),
++            links: Response.Links(webDetails: href.map { Response.Link(href: $0) })
++        )
++    }
++
++    @Test func minimalHotelUsesNilDefaults() {
++        let listing = Listing(hotel())
++
++        #expect(listing.id == "h1")
++        #expect(listing.name == "Hotel One")
++        #expect(listing.city == nil)
++        #expect(listing.starRating == nil)
++        #expect(listing.guestRating == nil)
++        #expect(listing.reviewCount == nil)
++        #expect(listing.thumbnailURL == nil)
++        #expect(listing.detailsURL == nil)
++        #expect(listing.nightlyPrice == nil)
++        #expect(listing.totalPrice == nil)
++    }
++
++    @Test func mapsFullHotel() throws {
++        let listing = Listing(
++            hotel(
++                city: "Seattle",
++                starRating: "4.5",
++                guestRating: "8.6",
++                guestReviewCount: 321,
++                thumbnailUrl: "https://example.com/t.jpg",
++                roomTypes: [
++                    room(
++                        nightly: money("120.50"),
++                        total: money("361.50", "EUR"),
++                        href: "https://example.com/details"
++                    )
++                ]
++            )
++        )
++
++        #expect(listing.city == "Seattle")
++        #expect(listing.starRating == 4.5)
++        #expect(listing.guestRating == 8.6)
++        #expect(listing.reviewCount == 321)
++        #expect(listing.thumbnailURL == URL(string: "https://example.com/t.jpg"))
++        #expect(listing.detailsURL == URL(string: "https://example.com/details"))
++        #expect(listing.nightlyPrice == Price(amount: Decimal(string: "120.50")!, currencyCode: "USD"))
++        #expect(listing.totalPrice == Price(amount: Decimal(string: "361.50")!, currencyCode: "EUR"))
++    }
++
++    @Test func nonNumericRatingsBecomeNil() {
++        let listing = Listing(hotel(starRating: "four", guestRating: ""))
++
++        #expect(listing.starRating == nil)
++        #expect(listing.guestRating == nil)
++    }
++
++    @Test func integerRatingStringsParse() {
++        let listing = Listing(hotel(starRating: "3", guestRating: "9"))
++
++        #expect(listing.starRating == 3.0)
++        #expect(listing.guestRating == 9.0)
++    }
++
++    @Test func emptyThumbnailStringBecomesNil() {
++        #expect(Listing(hotel(thumbnailUrl: "")).thumbnailURL == nil)
++    }
++
++    @Test func usesFirstRoomTypeOnly() throws {
++        let listing = Listing(
++            hotel(
++                roomTypes: [
++                    room(nightly: money("100"), href: "https://example.com/first"),
++                    room(nightly: money("999"), href: "https://example.com/second"),
++                ]
++            )
++        )
++
++        #expect(listing.detailsURL == URL(string: "https://example.com/first"))
++        #expect(listing.nightlyPrice?.amount == 100)
++    }
++
++    @Test func emptyRoomTypesYieldNoPriceOrDetails() {
++        let listing = Listing(hotel(roomTypes: []))
++
++        #expect(listing.detailsURL == nil)
++        #expect(listing.nightlyPrice == nil)
++        #expect(listing.totalPrice == nil)
++    }
++
++    @Test func roomWithoutPriceOrLinksYieldsNils() {
++        let listing = Listing(hotel(roomTypes: [Response.RoomType(price: nil, links: nil)]))
++
++        #expect(listing.detailsURL == nil)
++        #expect(listing.nightlyPrice == nil)
++        #expect(listing.totalPrice == nil)
++    }
++
++    @Test func roomWithOnlyNightlyRateLeavesTotalNil() {
++        let listing = Listing(hotel(roomTypes: [room(nightly: money("80"))]))
++
++        #expect(listing.nightlyPrice == Price(amount: 80, currencyCode: "USD"))
++        #expect(listing.totalPrice == nil)
++        #expect(listing.detailsURL == nil)
++    }
++
++    @Test func unparseablePriceValueBecomesNil() {
++        let listing = Listing(
++            hotel(roomTypes: [room(nightly: money("abc"), total: money("240"))])
++        )
++
++        #expect(listing.nightlyPrice == nil)
++        #expect(listing.totalPrice == Price(amount: 240, currencyCode: "USD"))
++    }
++
++    @Test func priceParsesDecimalWithPosixLocale() throws {
++        let price = try #require(Price(money("1234.56", "GBP")))
++
++        #expect(price.amount == Decimal(string: "1234.56", locale: Locale(identifier: "en_US_POSIX")))
++        #expect(price.currencyCode == "GBP")
++    }
++
++    @Test func priceRejectsEmptyAndNonNumericValues() {
++        #expect(Price(money("")) == nil)
++        #expect(Price(money("abc")) == nil)
++        #expect(Price(money("USD 12")) == nil)
++    }
++
++    @Test func priceParsesOnlyLeadingNumericPrefix() {
++        // Decimal(string:) is lenient: a comma or trailing text ends parsing rather than failing it.
++        #expect(Price(money("1,234"))?.amount == 1)
++        #expect(Price(money("12 USD"))?.amount == 12)
++    }
++
++    @Test func priceKeepsCurrencyCodeVerbatim() throws {
++        let price = try #require(Price(money("5", "xyz")))
++
++        #expect(price.currencyCode == "xyz")
++    }
++}

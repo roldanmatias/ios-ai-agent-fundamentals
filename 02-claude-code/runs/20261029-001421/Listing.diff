@@ -1,0 +1,100 @@
+diff --git a/Tests/ListingsKitTests/ListingTests.swift b/Tests/ListingsKitTests/ListingTests.swift
+new file mode 100644
+index 0000000..20549b8
+--- /dev/null
++++ b/Tests/ListingsKitTests/ListingTests.swift
+@@ -0,0 +1,94 @@
++import Foundation
++import Testing
++
++@testable import ListingsKit
++
++@Suite struct ListingTests {
++    @Test func initDefaultsOptionalFieldsToNil() {
++        let listing = Listing(id: "1", name: "Hotel")
++
++        #expect(listing.id == "1")
++        #expect(listing.name == "Hotel")
++        #expect(listing.city == nil)
++        #expect(listing.starRating == nil)
++        #expect(listing.guestRating == nil)
++        #expect(listing.reviewCount == nil)
++        #expect(listing.thumbnailURL == nil)
++        #expect(listing.detailsURL == nil)
++        #expect(listing.nightlyPrice == nil)
++        #expect(listing.totalPrice == nil)
++    }
++
++    @Test func initStoresEveryProvidedValue() throws {
++        let thumbnail = try #require(URL(string: "https://example.com/t.jpg"))
++        let details = try #require(URL(string: "https://example.com/d"))
++        let nightly = Price(amount: 100, currencyCode: "USD")
++        let total = Price(amount: 300, currencyCode: "USD")
++
++        let listing = Listing(
++            id: "42",
++            name: "Grand",
++            city: "Paris",
++            starRating: 4.5,
++            guestRating: 8.9,
++            reviewCount: 120,
++            thumbnailURL: thumbnail,
++            detailsURL: details,
++            nightlyPrice: nightly,
++            totalPrice: total
++        )
++
++        #expect(listing.id == "42")
++        #expect(listing.name == "Grand")
++        #expect(listing.city == "Paris")
++        #expect(listing.starRating == 4.5)
++        #expect(listing.guestRating == 8.9)
++        #expect(listing.reviewCount == 120)
++        #expect(listing.thumbnailURL == thumbnail)
++        #expect(listing.detailsURL == details)
++        #expect(listing.nightlyPrice == nightly)
++        #expect(listing.totalPrice == total)
++    }
++
++    @Test func identifiableIDIsTheStoredID() {
++        let listing = Listing(id: "abc", name: "Hotel")
++
++        #expect(listing.id == "abc")
++    }
++
++    @Test func equalListingsAreEqualAndHashTheSame() {
++        let a = Listing(id: "1", name: "Hotel", city: "Rome")
++        let b = Listing(id: "1", name: "Hotel", city: "Rome")
++
++        #expect(a == b)
++        #expect(a.hashValue == b.hashValue)
++        #expect(Set([a, b]).count == 1)
++    }
++
++    @Test func listingsDifferingInAnyFieldAreNotEqual() {
++        let base = Listing(id: "1", name: "Hotel")
++
++        #expect(base != Listing(id: "2", name: "Hotel"))
++        #expect(base != Listing(id: "1", name: "Other"))
++        #expect(base != Listing(id: "1", name: "Hotel", city: "Rome"))
++        #expect(base != Listing(id: "1", name: "Hotel", starRating: 3))
++        #expect(base != Listing(id: "1", name: "Hotel", guestRating: 7))
++        #expect(base != Listing(id: "1", name: "Hotel", reviewCount: 1))
++        #expect(base != Listing(id: "1", name: "Hotel", thumbnailURL: URL(string: "https://a.com")))
++        #expect(base != Listing(id: "1", name: "Hotel", detailsURL: URL(string: "https://a.com")))
++        #expect(
++            base != Listing(id: "1", name: "Hotel", nightlyPrice: Price(amount: 1, currencyCode: "USD")))
++        #expect(
++            base != Listing(id: "1", name: "Hotel", totalPrice: Price(amount: 1, currencyCode: "USD")))
++    }
++
++    @Test func nilAndPresentPricesAreDistinct() {
++        let withPrice = Listing(
++            id: "1", name: "Hotel", nightlyPrice: Price(amount: 50, currencyCode: "EUR"))
++        let otherCurrency = Listing(
++            id: "1", name: "Hotel", nightlyPrice: Price(amount: 50, currencyCode: "USD"))
++
++        #expect(withPrice != otherCurrency)
++        #expect(Set([withPrice, otherCurrency]).count == 2)
++    }
++}

@@ -1,0 +1,7 @@
+PASS  swift build
+PASS  swift test
+PASS  swift format lint
+PASS  no assertions removed
+PASS  no @unchecked Sendable / nonisolated(unsafe) added
+
+RESULT: PASS

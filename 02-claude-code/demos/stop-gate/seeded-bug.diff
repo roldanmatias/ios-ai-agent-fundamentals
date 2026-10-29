@@ -1,0 +1,12 @@
+diff --git a/Sources/ListingsKit/PriceFormatter.swift b/Sources/ListingsKit/PriceFormatter.swift
+index e92a791..86f9d11 100644
+--- a/Sources/ListingsKit/PriceFormatter.swift
++++ b/Sources/ListingsKit/PriceFormatter.swift
+@@ -8,6 +8,6 @@ public struct PriceFormatter: Sendable {
+     }
+ 
+     public func string(from price: Price) -> String {
+-        price.amount.formatted(.currency(code: price.currencyCode).locale(locale))
++        price.amount.formatted(.number.locale(locale))
+     }
+ }

@@ -1,0 +1,16 @@
+{
+  "name": "ios-swift-guardrails",
+  "version": "0.1.0",
+  "description": "Guardrails for Claude Code in Swift packages: blocks edits that remove test assertions or add @unchecked Sendable, formats after every edit, refuses to stop on a red build, plus a verify-swift skill and a read-only swift-reviewer subagent.",
+  "author": {
+    "name": "Matias Roldan"
+  },
+  "repository": "https://github.com/roldanmatias/ios-ai-agent-fundamentals",
+  "keywords": [
+    "swift",
+    "ios",
+    "hooks",
+    "testing",
+    "guardrails"
+  ]
+}

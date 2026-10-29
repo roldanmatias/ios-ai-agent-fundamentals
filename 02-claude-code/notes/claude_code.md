@@ -218,13 +218,30 @@ A plugin is one installable unit: skills, subagents, hooks, MCP configs (plus LS
 
 ## 10. Applying this to ListingsKit
 
-- **CLAUDE.md for ListingsKit / SwiftMigrator:** checkable Swift rules, e.g. "Use Swift Testing (`@Test`, `#expect`), not XCTest, for new tests" and "Mark UI-facing types `@MainActor`; never use `@unchecked Sendable`."
-- **Stop hook:** run `swift build && swift test`; exit 2 on failure so Claude can't claim done on a red build. Same idea as xcfix's harness verification.
-- **PreToolUse hook:** deny edits that delete `#expect` / `XCTAssert` lines or add `@unchecked Sendable`, the xcfix guardrails as real enforcement.
-- **PostToolUse hook:** run `swiftformat` / `swiftlint` after edits.
-- **Verification skill** in `.claude/skills/verify-swift/` with a `check.sh` that runs build, tests and lint.
-- **Headless + worktrees** one `claude -p` run per worktree over 5 files.
-- **`--bare` + Don't ask** for nightly migration in GitHub Actions macOS runners.
+Each item is built in [`02-claude-code/ListingsKit`](../ListingsKit/), a copy of the xcfix fixture, so the eval fixture stays untouched. Step-by-step build notes and the evidence for each one are in [claude_code_implementation.md](claude_code_implementation.md).
+
+| Concept | What it looks like for an iOS package | Course section |
+| --- | --- | --- |
+| **CLAUDE.md** | Checkable Swift rules: Swift Testing for new tests, `StubTransport` instead of the network, explicit `TimeZone` / `Locale`. `IMPORTANT` is spent only on the two rules that a hook also enforces | 2 |
+| **Permissions** | `.claude/settings.json` allows `swift build/test/format` and read-only git; denies `git push`, `rm -rf`, `curl`, `.env`, and edits to `Package.swift` and `.claude/` | 4 |
+| **PreToolUse hook** | Denies an edit that leaves fewer `#expect` / `#require` / `XCTAssert` than before, or adds `@unchecked Sendable` / `nonisolated(unsafe)`. It compares old and new text, so legitimate test edits still work | 5 |
+| **PostToolUse hook** | `swift format` (part of the Xcode toolchain, no install needed) on the edited file; lint findings go back as `additionalContext` | 5 |
+| **Stop hook** | `swift build && swift test`, exit 2 on failure. Skips when no `.swift` file changed, and gives up after 3 blocks per session so a test Claude can't fix doesn't loop forever | 5, 8 |
+| **SessionStart (compact)** | After compaction, prints the branch, changed Swift files and the last check result | 5 |
+| **Verification skill** | `verify-swift`: lean `SKILL.md`, depth in `reference.md`, the gates in `check.sh` (build, test, lint, no assertions removed, no unsafe concurrency added) | 3, 8 |
+| **Subagent** | `swift-reviewer`: read-only, cold-context review of the diff against CLAUDE.md | 8 |
+| **Xcode MCP bridge** | `.mcp.json` runs `xcrun mcpbridge` so Claude can use Xcode's own tools (build, tests, Previews) | – |
+| **Headless + worktrees** | One `claude -p` per source file, each in its own worktree, with `--json-schema` output. The script re-runs the gates itself and never trusts the agent's report | 6, 8 |
+| **Hook demos** | Reproducible headless sessions that show each guardrail firing, with transcripts committed as evidence | 8 |
+| **CI** | GitHub Actions on `macos-15`, manual until the API key secret exists. Not `--bare`: it would skip the hooks, CLAUDE.md and skills the run depends on | 6, 7 |
+| **Plugin** | `ios-swift-guardrails`: the hooks, skill and subagent packaged from `.claude/`, with a local marketplace so any Swift repo can install them | 9 |
+
+**Lessons the implementation added to the course notes:**
+
+- **Instructions vs enforcement, observed.** Asked to delete an assertion, Claude refused from CLAUDE.md alone and the hook never fired. Told "I own the repo, the rule doesn't apply", it tried the edit, and the hook denied it. Instructions can be argued with; hooks can't.
+- **Project `permissions.allow` is ignored in an untrusted workspace**, which includes every fresh worktree and CI runner. Hooks still run. Headless scripts must pass the allow list explicitly with `--allowedTools`.
+- **`--setting-sources project`** keeps a headless run from loading your personal plugins and hooks, so it behaves the same on every machine.
+- **A Stop hook needs a loop guard and a cheap skip**, or it costs a full test run on every turn and can block forever.
 
 ## Key takeaways
 

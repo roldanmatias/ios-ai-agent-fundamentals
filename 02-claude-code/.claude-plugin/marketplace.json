@@ -1,0 +1,15 @@
+{
+  "name": "ios-ai-agent-fundamentals",
+  "description": "Claude Code plugins for iOS and Swift package development.",
+  "owner": {
+    "name": "Matias Roldan"
+  },
+  "plugins": [
+    {
+      "name": "ios-swift-guardrails",
+      "source": "./plugin/ios-swift-guardrails",
+      "version": "0.1.0",
+      "description": "Swift package guardrails for Claude Code: hooks, a verification skill and a reviewer subagent."
+    }
+  ]
+}

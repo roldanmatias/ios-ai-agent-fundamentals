@@ -1,0 +1,55 @@
+import Foundation
+import Testing
+
+@testable import ListingsKit
+
+struct PriceTests {
+    @Test func storesAmountAndCurrencyCode() {
+        let price = Price(amount: Decimal(string: "19.99")!, currencyCode: "USD")
+
+        #expect(price.amount == Decimal(string: "19.99")!)
+        #expect(price.currencyCode == "USD")
+    }
+
+    @Test func equalPricesAreEqualAndShareAHash() {
+        let a = Price(amount: Decimal(string: "10.50")!, currencyCode: "EUR")
+        let b = Price(amount: Decimal(string: "10.5")!, currencyCode: "EUR")
+
+        #expect(a == b)
+        #expect(a.hashValue == b.hashValue)
+    }
+
+    @Test func differentAmountOrCurrencyAreNotEqual() {
+        let base = Price(amount: 10, currencyCode: "USD")
+
+        #expect(base != Price(amount: 11, currencyCode: "USD"))
+        #expect(base != Price(amount: 10, currencyCode: "EUR"))
+    }
+
+    @Test func deduplicatesInASet() {
+        let prices: Set<Price> = [
+            Price(amount: 5, currencyCode: "USD"),
+            Price(amount: 5, currencyCode: "USD"),
+            Price(amount: 5, currencyCode: "GBP"),
+        ]
+
+        #expect(prices.count == 2)
+    }
+
+    @Test func allowsZeroNegativeAndEmptyCurrencyWithoutValidation() {
+        let free = Price(amount: 0, currencyCode: "USD")
+        let refund = Price(amount: -3, currencyCode: "")
+
+        #expect(free.amount == 0)
+        #expect(refund.amount == -3)
+        #expect(refund.currencyCode.isEmpty)
+    }
+
+    @Test func isSendableAcrossTasks() async {
+        let price = Price(amount: 42, currencyCode: "USD")
+
+        let echoed = await Task { price }.value
+
+        #expect(echoed == price)
+    }
+}
