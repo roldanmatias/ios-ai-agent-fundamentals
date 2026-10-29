@@ -1,0 +1,6 @@
+# Headless runs: keep only the runs chosen as evidence. To keep a new one, add a
+# !runs/<timestamp>/ line below.
+runs/*
+!runs/20261029-001421/
+# Only the "workspace not trusted" warning; documented in notes/claude_code_implementation.md.
+runs/**/*.stderr
