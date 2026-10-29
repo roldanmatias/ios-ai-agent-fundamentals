@@ -1,0 +1,55 @@
+# Runs 02-claude-code/scripts/headless-add-tests.sh on a macOS runner: one worktree and one
+# headless Claude Code run per file, verified by the script's own gates, never by the agent.
+#
+# Manual only until the ANTHROPIC_API_KEY secret exists. To run it nightly, uncomment `schedule`.
+# Not --bare: --bare skips hooks, CLAUDE.md and skills, which are the guardrails this run relies on.
+name: Claude headless tests (ListingsKit)
+
+on:
+  workflow_dispatch:
+    inputs:
+      budget:
+        description: Max USD per file
+        default: "1.00"
+  # schedule:
+  #   - cron: "0 6 * * 1-5"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claude-headless-tests
+  cancel-in-progress: false
+
+jobs:
+  headless:
+    runs-on: macos-15
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: 02-claude-code
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Check the package builds before spending tokens
+        working-directory: 02-claude-code/ListingsKit
+        run: swift build && swift test
+
+      - name: Headless runs, one worktree per file
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: scripts/headless-add-tests.sh -j 1 -b "${{ inputs.budget || '1.00' }}"
+
+      - name: Summary
+        if: always()
+        run: cat runs/*/results.md >> "$GITHUB_STEP_SUMMARY" || echo "No results" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload results (diffs, JSON results, verify logs)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: headless-tests
+          path: 02-claude-code/runs/
