@@ -7,6 +7,7 @@ AI agents for iOS development, built from first principles: a tool-using agent l
 | Module | What it is | Highlights |
 | --- | --- | --- |
 | [01 · Agent loop](01-agent-loop/) | **xcfix**: an agent that fixes Swift packages and Xcode projects whose build or tests fail, in a hand-written Python loop | Fixed **15/15** runs across 5 seeded bugs, at **$0.015** and **21.5 s** per run on average (eval of 2026-10-22). Narrow iOS tools, harness-side verification, guardrails, git rollback, prompt caching, JSONL traces |
+| [02 · Claude Code](02-claude-code/) | Claude Code set up on **ListingsKit**: CLAUDE.md, permissions, guardrail hooks, a verification skill, a reviewer subagent, Xcode's MCP bridge, headless runs in worktrees, CI and a plugin | Headless runs wrote tests for **5/5** files, all verified by the script's own gates, for **$0.51** in total (run of 2026-10-29). Committed transcripts show each hook firing |
 
 ## Notes
 
@@ -16,6 +17,7 @@ AI agents for iOS development, built from first principles: a tool-using agent l
 | 01 · Agent loop | [Managed Agents vs xcfix](01-agent-loop/notes/managed_agents.md) | The session / harness / sandbox split from Anthropic's "Scaling Managed Agents" post, mapped onto xcfix: what matches, what's missing, why cloud sandboxes don't fit iOS |
 | 01 · Agent loop | [The agent loop, explained](01-agent-loop/notes/agent_loop_explained.md) | The loop, tool calls, stop conditions and workflow vs agent, answered with xcfix's design and eval numbers |
 | 02 · Claude Code | [Claude Code: concepts and tips](02-claude-code/notes/claude_code.md) | Notes from *Claude Code in Action*: steering a session, CLAUDE.md, skills, permission modes, hooks, headless runs and the SDK, GitHub Code Review, plugins, and how they apply to ListingsKit. Rule of thumb: CLAUDE.md and skills are instructions, hooks are code that always runs |
+| 02 · Claude Code | [Claude Code on ListingsKit, step by step](02-claude-code/notes/claude_code_implementation.md) | How each concept was built and verified, the evidence (hook demos, headless results) and what building it taught, with one commit per step |
 
 ## Run it
 
